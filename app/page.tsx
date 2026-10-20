@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef, useState } from "react";
@@ -10,63 +9,51 @@ export default function InvitationPage() {
   const [introComplete, setIntroComplete] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
-  // Replace with your actual Typeform registration link
+  // Replace this with your actual Typeform URL
   const typeformUrl =
-    "https://1w1ox1g7qlc.typeform.com/to/sFdMdqBT";
+    "https://YOUR-TYPEFORM-LINK.typeform.com/to/YOUR-FORM-ID";
 
-  // First animation finishes and reveals the event details
   const handleIntroComplete = () => {
     setIntroComplete(true);
     setVideoError(false);
   };
 
-  // Handle an error loading the intro video
   const handleIntroError = () => {
     setVideoError(true);
   };
 
-  // Retry the intro video
   const handleRetry = () => {
-    const video = introVideoRef.current;
-
-    if (!video) return;
-
+    // Clear the error first so the video element mounts again
     setVideoError(false);
-    video.currentTime = 0;
-
-    video.play().catch((error) => {
-      console.error("Intro video playback failed:", error);
-      setVideoError(true);
-    });
   };
 
   return (
     <main className="invitation-page">
       <div className="invitation-frame">
 
-        {/* FIRST ANIMATION */}
+        {/* INTRO VIDEO */}
 
         {!introComplete && !videoError && (
-          <video
-            ref={introVideoRef}
-            className="invitation-video"
-            src="/videos/ultimate-woman-intro.mp4"
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onEnded={handleIntroComplete}
-            onError={handleIntroError}
-          />
+          <div className="video-container">
+            <video
+              ref={introVideoRef}
+              className="invitation-video"
+              src="/videos/ultimate-woman-intro.mp4"
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              onEnded={handleIntroComplete}
+              onError={handleIntroError}
+            />
+          </div>
         )}
 
         {/* VIDEO ERROR */}
 
         {videoError && !introComplete && (
           <div className="video-error">
-            <p>
-              The opening animation could not play.
-            </p>
+            <p>The opening animation could not play.</p>
 
             <button
               type="button"
@@ -87,7 +74,7 @@ export default function InvitationPage() {
               YOU ARE CORDIALLY INVITED
             </p>
 
-            <h1>
+            <h1 className="invitation-heading">
               THE
               <br />
               ULTIMATE
@@ -114,35 +101,34 @@ export default function InvitationPage() {
 
             <div className="event-details">
 
-              <p>
+              <div className="event-detail">
                 <span>DATE</span>
-                Sunday, 8th November 2026
-              </p>
+                <p>Sunday, 8th November 2026</p>
+              </div>
 
-              <p>
+              <div className="event-detail">
                 <span>TIME</span>
-                4:00 PM
-              </p>
+                <p>4:00 PM</p>
+              </div>
 
-              <p>
+              <div className="event-detail">
                 <span>VENUE</span>
-                The Waterside Venue, Lekki
-              </p>
+                <p>The Waterside Venue, Lekki</p>
+                <small>Admiralty Road, Lekki, Lagos</small>
+              </div>
 
-              <p>
+              <div className="event-detail">
                 <span>DRESS CODE</span>
-                Business Casual
-              </p>
+                <p>Business Casual</p>
+              </div>
 
             </div>
 
-            {/* DIRECT TYPEFORM LINK */}
+            {/* RSVP */}
 
             <div className="rsvp-section">
 
-              <p>
-                Kindly confirm your presence
-              </p>
+              <p>Kindly confirm your presence</p>
 
               <a
                 href={typeformUrl}
