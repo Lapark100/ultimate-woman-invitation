@@ -11,7 +11,7 @@ export default function InvitationPage() {
 
   // Replace this with your actual Typeform URL
   const typeformUrl =
-    "https://YOUR-TYPEFORM-LINK.typeform.com/to/YOUR-FORM-ID";
+    "https:https://1w1ox1g7qlc.typeform.com/to/sFdMdqBT";
 
   const handleIntroComplete = () => {
     setIntroComplete(true);
