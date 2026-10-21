@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState } from "react";
@@ -9,22 +10,76 @@ export default function InvitationPage() {
   const [introComplete, setIntroComplete] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
-  // Replace this with your actual Typeform URL
+  // Your Typeform registration link
   const typeformUrl =
     "https://1w1ox1g7qlc.typeform.com/to/sFdMdqBT";
 
+  // Reveal the invitation after the video ends
   const handleIntroComplete = () => {
     setIntroComplete(true);
     setVideoError(false);
   };
 
+  // Handle video loading errors
   const handleIntroError = () => {
     setVideoError(true);
   };
 
-  const handleRetry = () => {
-    // Clear the error first so the video element mounts again
+  // Attempt to play the video with sound
+  const handleVideoLoaded = async () => {
+    const video = introVideoRef.current;
+
+    if (!video) return;
+
+    video.muted = false;
+    video.volume = 1;
+
+    try {
+      await video.play();
+    } catch (error) {
+      console.warn(
+        "Autoplay with sound was blocked. Trying muted autoplay.",
+        error
+      );
+
+      // Mobile browsers may block autoplay with sound
+      video.muted = true;
+
+      try {
+        await video.play();
+      } catch (fallbackError) {
+        console.error(
+          "Video autoplay failed:",
+          fallbackError
+        );
+      }
+    }
+  };
+
+  // Retry video after an error
+  const handleRetry = async () => {
+    const video = introVideoRef.current;
+
     setVideoError(false);
+
+    if (!video) return;
+
+    video.currentTime = 0;
+    video.muted = false;
+
+    try {
+      await video.play();
+    } catch (error) {
+      console.warn("Retry with sound was blocked:", error);
+
+      video.muted = true;
+
+      try {
+        await video.play();
+      } catch (fallbackError) {
+        console.error("Video retry failed:", fallbackError);
+      }
+    }
   };
 
   return (
@@ -40,9 +95,9 @@ export default function InvitationPage() {
               className="invitation-video"
               src="/videos/ultimate-woman-intro.mp4"
               autoPlay
-              muted
               playsInline
               preload="auto"
+              onLoadedData={handleVideoLoaded}
               onEnded={handleIntroComplete}
               onError={handleIntroError}
             />
